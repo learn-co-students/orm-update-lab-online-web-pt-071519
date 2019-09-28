@@ -1,13 +1,13 @@
 require_relative "../config/environment.rb"
 
 class Student
-  
+
   attr_accessor :name, :grade, :id
     
   def initialize(id=nil, name, grade)
-    @id = id[0]
-    @name = name[1]
-    @grade = grade[2]
+    @id = id
+    @name = name
+    @grade = grade
     # initialize the instance variables for your table.
     # add attr_ above 
     # set id argument to nil and let save assign record id
@@ -57,7 +57,7 @@ class Student
   end
 
   def self.drop_table
-    sql = "DROP TABLE IF TABLE EXISTS students"
+    sql = "DROP TABLE IF EXISTS students;"
     DB[:conn].execute(sql)
     # checks for and drops your table by name if it exists
   end
@@ -72,7 +72,7 @@ class Student
       SQL
 
       DB[:conn].execute(sql, self.name, self.grade)
-      id = DB[:conn].execute("SELECT last_insert_rowid() FROM students")[0][0]
+      @id = DB[:conn].execute("SELECT last_insert_rowid() FROM students")[0][0]
       # Checks for a duplicate record
       # Uses a SQL INSERT and inserts a new row into the database using the attributes (self.argument)
       # Assigns the id attribute of the object once the row has been inserted into the database.
@@ -82,7 +82,7 @@ class Student
 
   def update
     sql = <<-SQL
-        UPDATE student
+        UPDATE students
         SET name = ?, grade = ?
         WHERE id = ?
     SQL
